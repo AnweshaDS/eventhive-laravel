@@ -22,3 +22,7 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+/public/images/qrcodes/
+/public/images/event_*.jpg
+/public/images/event_*.png
+/public/images/event_*.webp
