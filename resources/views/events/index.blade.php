@@ -9,26 +9,27 @@
         <h1 style="font-size:1.8rem; margin-bottom:0.3rem;">
             <i class="fa-solid fa-calendar-days" style="color:var(--primary)"></i> Browse Events
         </h1>
-        <p style="color:var(--text-muted);">
+        <p style="color:var(--text-muted);" id="events-counter">
             {{ $events->count() }} event{{ $events->count() !== 1 ? 's' : '' }} found
-            @if($search) for "<strong>{{ $search }}</strong>" @endif
         </p>
     </div>
 </div>
 
 <div style="max-width:1200px; margin:0 auto; padding:2rem;">
 
-    <!-- FILTERS -->
-    <form method="GET" action="{{ route('events.index') }}"
-          style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; margin-bottom:2rem;">
-        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr auto; gap:0.75rem; align-items:end;">
+    <!-- LIVE SEARCH FILTERS — AJAX -->
+    <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; margin-bottom:2rem;">
+        <div style="display:grid; grid-template-columns:2fr 1fr 1fr auto; gap:0.75rem; align-items:end;">
             <div class="form-group" style="margin:0;">
                 <label><i class="fa-solid fa-magnifying-glass"></i> Search</label>
-                <input type="text" name="search" placeholder="Event name, venue, city..." value="{{ $search }}">
+                <input type="text" id="live-search-input"
+                       placeholder="Search events, venues, cities..."
+                       value="{{ $search }}"
+                       style="width:100%;">
             </div>
             <div class="form-group" style="margin:0;">
                 <label><i class="fa-solid fa-tag"></i> Category</label>
-                <select name="category">
+                <select id="live-category">
                     <option value="">All Categories</option>
                     @foreach(array_keys($icons) as $cat)
                         <option value="{{ $cat }}" {{ $category === $cat ? 'selected' : '' }}>{{ $cat }}</option>
@@ -37,30 +38,24 @@
             </div>
             <div class="form-group" style="margin:0;">
                 <label><i class="fa-solid fa-location-dot"></i> City</label>
-                <select name="city">
+                <select id="live-city">
                     <option value="">All Cities</option>
                     @foreach($cities as $c)
                         <option value="{{ $c }}" {{ $city === $c ? 'selected' : '' }}>{{ $c }}</option>
                     @endforeach
                 </select>
             </div>
-            <div class="form-group" style="margin:0;">
-                <label><i class="fa-solid fa-arrow-up-wide-short"></i> Sort By</label>
-                <select name="sort">
-                    <option value="date"    {{ $sort === 'date'    ? 'selected' : '' }}>Date</option>
-                    <option value="popular" {{ $sort === 'popular' ? 'selected' : '' }}>Popular</option>
-                </select>
-            </div>
-            <div style="display:flex; gap:0.5rem;">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa-solid fa-filter"></i> Filter
-                </button>
-                <a href="{{ route('events.index') }}" class="btn btn-outline">
-                    <i class="fa-solid fa-xmark"></i>
-                </a>
+            <div style="display:flex; align-items:center; gap:0.5rem; padding-bottom:0.1rem;">
+                <span id="search-loader" style="display:none; color:var(--primary);">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                </span>
             </div>
         </div>
-    </form>
+        <div style="margin-top:0.75rem; font-size:0.85rem; color:var(--text-muted);">
+            <i class="fa-solid fa-bolt" style="color:var(--primary)"></i>
+            Results update live as you type - powered by AJAX
+        </div>
+    </div>
 
     <!-- CATEGORY PILLS -->
     <div class="categories">
@@ -76,19 +71,11 @@
         @endforeach
     </div>
 
-    <!-- EVENTS GRID -->
-    @if($events->isEmpty())
-        <div style="text-align:center; padding:4rem; color:var(--text-muted);">
-            <i class="fa-solid fa-calendar-xmark" style="font-size:3rem; display:block; margin-bottom:1rem; color:var(--border)"></i>
-            <h3 style="margin-bottom:0.5rem;">No events found</h3>
-            <p>Try adjusting your filters or check back later.</p>
-            <a href="{{ route('events.index') }}" class="btn btn-outline" style="margin-top:1rem;">Clear Filters</a>
-        </div>
-    @else
-    <div class="events-grid">
-        @foreach($events as $event)
+    <!--EVENTS GRID-->
+    <div class="events-grid" id="live-events-grid">
+        @forelse($events as $event)
         @php $seats_left = $event->available_seats; @endphp
-        <div class="event-card">
+        <div class="event-card" data-category="{{ $event->category }}">
             <div class="card-img">
                 @if($event->banner_image)
                     <img src="{{ asset('images/' . $event->banner_image) }}"
@@ -135,9 +122,16 @@
                 </div>
             </div>
         </div>
-        @endforeach
+        @empty
+        <div style="text-align:center; padding:4rem; color:var(--text-muted); grid-column:1/-1;">
+            <i class="fa-solid fa-calendar-xmark" style="font-size:3rem; display:block; margin-bottom:1rem;"></i>
+            <h3 style="margin-bottom:0.5rem;">No events found</h3>
+            <p>Try adjusting your filters or check back later.</p>
+            <a href="{{ route('events.index') }}" class="btn btn-outline" style="margin-top:1rem;">Clear Filters</a>
+        </div>
+        @endforelse
     </div>
-    @endif
+
 </div>
 
 @endsection
