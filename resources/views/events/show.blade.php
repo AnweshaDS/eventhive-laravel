@@ -52,6 +52,41 @@
                 </div>
             </div>
 
+            {{-- WEATHER WIDGET --}}
+            @if($weather)
+            <div style="background:linear-gradient(135deg, #0f3460, #16213e); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem 1.5rem; margin-bottom:1.5rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+                <img src="{{ $weather['icon_url'] }}" alt="{{ $weather['description'] }}"
+                     style="width:60px; height:60px;">
+                <div style="flex:1;">
+                    <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:0.3rem;">
+                        <i class="fa-solid fa-cloud-sun" style="color:var(--primary)"></i>
+                         Weather {{ now()->diffInDays($event->event_date, false) >= 0 ? 'Forecast for Event Day' : 'Currently in ' . $event->city }}
+                    </div>
+                <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+                    <span style="font-size:2rem; font-weight:700; color:var(--white);">{{ $weather['temp'] }}°C</span>
+                    <div>
+                        <div style="font-size:0.9rem; color:var(--text-light);">{{ $weather['description'] }}</div>
+                        <div style="font-size:0.82rem; color:var(--text-muted);">
+                             Feels like {{ $weather['feels_like'] }}°C
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex; gap:1.5rem; font-size:0.85rem; color:var(--text-muted);">
+                <div style="text-align:center;">
+                    <i class="fa-solid fa-droplet" style="color:#3b9edd; display:block; margin-bottom:3px;"></i>
+                    {{ $weather['humidity'] }}%<br>Humidity
+                </div>
+                <div style="text-align:center;">
+                    <i class="fa-solid fa-wind" style="color:#6c63ff; display:block; margin-bottom:3px;"></i>
+                    {{ $weather['wind_speed'] }} km/h<br>Wind
+                </div>
+            </div>  
+            </div>
+        </div>
+    </div>
+    @endif
+
             <!-- Description -->
             <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; margin-bottom:1.5rem;">
                 <h3 style="margin-bottom:1rem;">
