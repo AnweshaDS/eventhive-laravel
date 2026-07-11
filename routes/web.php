@@ -26,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Organizer routes
-Route::middleware(['auth'])->prefix('organizer')->name('organizer.')->group(function () {
+Route::middleware(['auth', 'role:organizer'])->prefix('organizer')->name('organizer.')->group(function () {
     Route::get('/dashboard', [OrganizerController::class, 'dashboard'])->name('dashboard');
     Route::get('/events', [OrganizerController::class, 'events'])->name('events');
     Route::get('/events/create', [OrganizerController::class, 'create'])->name('create');
@@ -38,7 +38,7 @@ Route::middleware(['auth'])->prefix('organizer')->name('organizer.')->group(func
 });
 
 // Admin routes
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::post('/users/role', [AdminController::class, 'changeRole'])->name('users.role');
