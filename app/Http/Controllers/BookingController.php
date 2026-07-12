@@ -112,4 +112,49 @@ class BookingController extends Controller
             return back()->with('error', 'Booking failed. Please try again.');
         }
     }
+
+    public function cancel($id)
+    {
+        $booking = Booking::where('user_id', Auth::id())
+                      ->where('booking_status', 'confirmed')
+                      ->findOrFail($id);
+
+        // Get event date
+        $event_date = $booking->ticketType->event->event_date;
+        $days_left  = now()->diffInDays($event_date, false);
+
+        // Must be 7+ days before event
+        if ($days_left < 7) {
+            return back()->with('error',
+                'Cancellation is only allowed 7 or more days before the event. ' .
+                'This event is ' . max(0, $days_left) . ' day(s) away.'
+            );
+        }
+    
+
+        try {
+            \DB::beginTransaction();
+
+            // Release seats back
+            $booking->ticketType->decrement('booked_seats', $booking->quantity);
+
+            // Update booking status
+            $booking->update([
+                'booking_status' => 'cancelled',
+                'payment_status' => $booking->total_amount > 0 ? 'refunded' : 'pending',
+            ]);
+
+            \DB::commit();
+
+            $message = $booking->total_amount > 0
+            ? 'Booking cancelled successfully. Your refund of ৳' . number_format($booking->total_amount, 0) . ' will be processed within 3-5 business days.'
+            : 'Booking cancelled successfully.';
+
+            return back()->with('success', $message);
+
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return back()->with('error', 'Cancellation failed. Please try again.');
+        }
+    }
 }
