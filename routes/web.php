@@ -20,9 +20,14 @@ Route::post('/qr/mark-scanned', [QrController::class, 'markScanned'])->name('qr.
 require __DIR__.'/auth.php';
 
 // Attendee routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:attendee,organizer,admin'])->group(function () {
     Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
     Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
+    Route::delete('/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
 });
 
 // Organizer routes
