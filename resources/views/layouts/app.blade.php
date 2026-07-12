@@ -21,6 +21,9 @@
             @else
                 <a href="{{ route('bookings.index') }}">My Tickets</a>
             @endif
+            <a href="{{ route('profile.edit') }}" style="color:var(--text-muted);">
+                <i class="fa-solid fa-user-circle"></i> {{ auth()->user()->name }}
+            </a>
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                 @csrf
                 <button type="submit" class="btn btn-outline">Logout</button>
