@@ -1,47 +1,80 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@extends('layouts.app')
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+@section('title', 'Login — EventHive')
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+@section('content')
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <a href="{{ route('home') }}" style="color:var(--primary); font-size:1.4rem; font-weight:700;">
+            Event<span style="color:var(--secondary)">Hive</span>
+        </a>
+        <h2 style="margin-top:1rem;">Welcome Back</h2>
+        <p>Login to your EventHive account</p>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first() }}
+            </div>
+        @endif
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+        @if(session('status'))
+            <div class="alert alert-success">{{ session('status') }}</div>
+        @endif
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" name="email" placeholder="you@example.com"
+                       value="{{ old('email') }}" required autofocus>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <div class="input-icon">
+                    <input type="password" name="password" id="password"
+                           placeholder="Your password" required>
+                    <i class="fa-regular fa-eye toggle-pass" onclick="togglePassword()"></i>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; margin-bottom:1rem;">
+                <input type="checkbox" name="remember" id="remember" style="width:auto; margin-right:0.5rem;">
+                <label for="remember" style="margin:0; font-size:0.9rem; color:var(--text-muted);">Remember me</label>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">
+                <i class="fa-solid fa-right-to-bracket"></i> Login
+            </button>
+        </form>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+        <p style="text-align:center; margin-top:1.2rem; font-size:0.9rem; color:var(--text-muted);">
+            Don't have an account?
+            <a href="{{ route('register') }}" style="color:var(--primary);">Sign up free</a>
+        </p>
+    </div>
+</div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
+<style>
+.input-icon { position: relative; }
+.input-icon input { padding-right: 2.5rem; }
+.toggle-pass {
+    position: absolute; right: 0.9rem; top: 50%;
+    transform: translateY(-50%); cursor: pointer;
+    color: var(--text-muted); font-size: 0.9rem;
+}
+</style>
+@endsection
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+@section('scripts')
+<script>
+function togglePassword() {
+    const input = document.getElementById('password');
+    const icon  = document.querySelector('.toggle-pass');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+</script>
+@endsection
