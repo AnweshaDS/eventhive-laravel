@@ -86,8 +86,9 @@ class EventController extends Controller
                 $event->city,
                 $event->event_date->format('Y-m-d H:i:s')
             );
-        } elseif ($daysDiff < 0) {
-            $weather = $this->weather->getCurrentWeather($event->city);
+        } else {
+                //show current weather(if far or past)
+                $weather = $this->weather->getCurrentWeather($event->city);
         }
 
         return view('events.show', compact('event', 'icons', 'avg_rating', 'weather'));

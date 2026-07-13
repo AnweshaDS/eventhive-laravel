@@ -60,8 +60,11 @@
             @foreach($active as $b)
             @php
                 $event     = $b->ticketType->event;
+                $diff      = now()->diff($event->event_date);
                 $days_left = now()->diffInDays($event->event_date, false);
+                $hours_left = (int)$diff->h;
                 $can_cancel = $days_left >= 7;
+                $days_left  = (int)$days_left;
                 $icons = ['Concert'=>'fa-music','Workshop'=>'fa-screwdriver-wrench','Conference'=>'fa-briefcase','Food'=>'fa-utensils','Sports'=>'fa-futbol','Comedy'=>'fa-face-laugh','Tech'=>'fa-laptop-code','Art'=>'fa-palette'];
             @endphp
             <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden;">
@@ -115,9 +118,17 @@
                             @elseif($days_left == 0)
                                 <span style="color:var(--warning); font-weight:600;">Event is today!</span>
                             @elseif($days_left <= 7)
-                                <span style="color:var(--warning);">{{ $days_left }} day(s) until event</span>
+                                <span style="color:var(--warning);">
+                                    {{ (int)$days_left }} day{{ (int)$days_left !== 1 ? 's' : '' }}
+                                    {{ $hours_left > 0 ? $hours_left . ' hr' . ($hours_left !== 1 ? 's' : '') : '' }}
+                                    until event
+                                </span>
                             @else
-                                <span style="color:var(--success);">{{ $days_left }} days until event</span>
+                                <span style="color:var(--success);">
+                                    {{ (int)$days_left }} days
+                                    {{ $hours_left > 0 ? $hours_left . ' hrs' : '' }}
+                                    until event
+                                </span>
                             @endif
                         </div>
 

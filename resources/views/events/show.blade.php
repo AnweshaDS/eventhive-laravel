@@ -60,7 +60,8 @@
                 <div style="flex:1;">
                     <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:0.3rem;">
                         <i class="fa-solid fa-cloud-sun" style="color:var(--primary)"></i>
-                         Weather {{ now()->diffInDays($event->event_date, false) >= 0 ? 'Forecast for Event Day' : 'Currently in ' . $event->city }}
+                         @php $daysDiff = now()->diffInDays($event->event_date, false); @endphp
+                         {{ $daysDiff >= 0 && $daysDiff <= 5 ? 'Weather Forecast for Event Day' : 'Current Weather in ' . $event->city }}
                     </div>
                 <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
                     <span style="font-size:2rem; font-weight:700; color:var(--white);">{{ $weather['temp'] }}°C</span>
