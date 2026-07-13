@@ -7,7 +7,7 @@
 <!-- HERO -->
 <section class="hero">
     <h1>Discover & Book <span>Amazing Events</span><br>Near You</h1>
-    <p>Concerts, workshops, food fests, conferences — find and book tickets for any public event, all in one place.</p>
+    <p>Concerts, workshops, food fests, conferences - find and book tickets for any public event, all in one place.</p>
     <div class="hero-btns">
         <a href="{{ route('events.index') }}" class="btn btn-primary btn-lg">Explore Events</a>
         <a href="{{ route('register') }}" class="btn btn-outline btn-lg">Host an Event</a>
@@ -27,20 +27,6 @@
         </div>
     </div>
 </section>
-
-<!-- SEARCH -->
-<div class="search-section">
-    <form class="search-bar" action="{{ route('events.index') }}" method="GET">
-        <input type="text" name="search" placeholder="Search events, artists, venues..." value="{{ request('search') }}">
-        <select name="category">
-            <option value="">All Categories</option>
-            @foreach(['Concert','Workshop','Conference','Food','Sports','Comedy','Tech','Art'] as $cat)
-                <option value="{{ $cat }}">{{ $cat }}</option>
-            @endforeach
-        </select>
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-</div>
 
 <!-- UPCOMING EVENTS -->
 <div class="section">
