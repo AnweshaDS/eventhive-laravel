@@ -1,59 +1,76 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# EventHive - Discover, Host & Attend Events Near You
+## Overview
+EventHive is a full-stack public event discovery and ticketing platform built with Laravel. Anyone can register as an organizer to host events - concerts, workshops, tech conferences, food fests, comedy nights, and more - while attendees browse, book, and manage tickets from a single open marketplace. The platform is designed as a real-world application, not limited to any university or club, with a focus on clean architecture, role-based access, and a polished user experience.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Tools & Technologies
 
-## About Laravel
+Frontend: HTML5, CSS, JavaScript  
+Backend: PHP (OCI8)  
+Framework: Laravel 11 - MVC version  
+Database: MySQL  
+Server: XAMPP (Apache)  
+ORM: Eloquent  
+Templating: Blade  
+External API: OpenWeatherMap (via Guzzle HTTP Client)  
+QR Code: endroid/qr-code  
+Authentication: Laravel Breeze  
+Icons: Font Awesome   
+Package Manager: Composer + npm  
+Version Control: Git + GitHub  
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Application Features
 
-## Learning Laravel
+### Public
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+1. Browse all published events with category, city, and keyword filters  
+2. Live AJAX search - results update instantly without page reload, powered by the REST API  
+3. Event detail page with full information, ticket tiers, reviews, and weather forecast  
+4. Weather widget using OpenWeatherMap API - shows forecast or current weather for the event city  
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Authentication
 
-## Laravel Sponsors
+1. Register as an Attendee or Organizer with role selection  
+2. Secure login with bcrypt hashing and role-based redirect  
+3. CSRF protection and session management on all forms  
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Attendee
 
-### Premium Partners
+1. Book tickets with quantity selection and real-time price calculation  
+2. QR code ticket generated automatically on every successful booking  
+3. Download QR code as PNG and verify authenticity via a unique token URL  
+4. My Tickets page with Active and Cancelled tabs  
+5. Cancel bookings up to 7 days before the event with automatic refund tracking  
+6. Profile management - update personal info and change password  
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Organizer
 
-## Contributing
+1. Personal dashboard with event stats and revenue overview  
+2. Full CRUD for events - create, edit, and delete with dynamic ticket tier management  
+3. Banner image upload support  
+4. Attendees list filtered by event with QR scan status  
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Admin
 
-## Code of Conduct
+1. Platform-wide dashboard with user, event, booking, and revenue statistics  
+2. Manage all users - search, filter by role, change roles, and delete accounts  
+3. Manage all events - change status (published/draft/cancelled) and delete  
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### REST API
 
-## Security Vulnerabilities
+1. GET /api/v1/events - list all published upcoming events with optional filters  
+2. GET /api/v1/events/{id} - single event with ticket types and reviews  
+3. GET /api/v1/events/stats - platform statistics  
+4. GET /api/v1/events/categories - all available categories  
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Security
 
-## License
+1. Custom RoleMiddleware protecting organizer and admin routes  
+2. Eloquent parameterized queries preventing SQL injection  
+3. Blade auto-escaping preventing XSS  
+4. Environment variables for all sensitive keys  
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Conclusion
+This project shows how a complete examination system can be built with the database as the core of all business logic. By implementing answer evaluation, result generation, access enforcement, and activity logging through Oracle PL/SQL rather than application code, the system ensures data consistency and integrity regardless of the frontend layer used. The Laravel framework provides a clean MVC structure for the application layer while the Oracle database and PL/SQL components remain the single source of truth for all operations.
