@@ -46,11 +46,10 @@
         <i class="fa-solid fa-circle-exclamation"></i> {{ session('error') }}
     </div>
 @endif
-
 @yield('content')
 
 <footer class="footer">
-    <p> 2026 <span>EventHive</span> — Discover, Host & Attend Events Near You</p>
+    <p> 2026 <span>EventHive</span> - Discover, Host & Attend Events Near You</p>
 </footer>
 
 <script src="{{ asset('js/main.js') }}"></script>

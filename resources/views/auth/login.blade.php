@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Login — EventHive')
+@section('title', 'Login - EventHive')
 
 @section('content')
 <div class="auth-wrapper">
@@ -10,7 +10,6 @@
         </a>
         <h2 style="margin-top:1rem;">Welcome Back</h2>
         <p>Login to your EventHive account</p>
-
         @if($errors->any())
             <div class="alert alert-danger">
                 <i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first() }}
@@ -62,7 +61,6 @@
 }
 </style>
 @endsection
-
 @section('scripts')
 <script>
 function togglePassword() {
